@@ -1,46 +1,36 @@
-# 1. 建立项目
+# 1. 创建项目 
 
-## 1.1  建立虚拟环境
+## 1.1安装Django
 
-给项目新建一个目录，命名为`blog_project`，切换到`blog_project`，创建虚拟环境。
-
-```python
-[thorgeng@localhost blog_project]$ python3 -m venv blog_env
-[thorgeng@localhost blog_project]$ ls
-blog_env
+```bash
+$ pip3 install django
 ```
 
-## 1.2 激活虚拟环境
+## 1.2 在Django中创建项目
 
-```python
-[thorgeng@localhost blog_project]$ source blog_env/bin/activate
-(blog_env) [thorgeng@localhost blog_project]$ 
-```
+进入存放项目的目录，执行`django-admin` 命令，生成项目文件夹，生成下列文件.
 
-### 1.2.1 停止虚拟环境
-
-```python
-(blog_env) [thorgeng@localhost blog_project]$ deactivate 
-[thorgeng@localhost blog_project]$ 
-```
-
-## 1.3 安装Django
-
-```python
-(blog_env) [thorgeng@localhost blog_project]$ pip3 install django
-```
-
-## 1.4 在Django中创建项目
-
-```python
-(blog_env) [thorgeng@localhost blog_project]$ django-admin.py startproject blog .  #一定要加点‘.’
-(blog_env) [thorgeng@localhost blog_project]$ ls
-blog  blog_env  manage.py
-(blog_env) [thorgeng@localhost blog_project]$ ls blog
+```bash
+$ django-admin.py startproject first_project  
+$ ls
+first_project   manage.py
+$ ls first_project 
 asgi.py  __init__.py  settings.py  urls.py  wsgi.py
 ```
 
-## 1.5 创建数据库
+`manage.py`---项目的管理、启动项目、创建APP、数据管理
+
+`__init__.py`---
+
+`settings.py`---项目配置文件，经常操作
+
+`urls.py`---URL和函数的对应关系，经常操作
+
+`wsgi.py`---接受网络请求
+
+`asgi.py`---接受网络请求
+
+## 1.3 创建数据库
 
 `Django`默认使用`sqlite3`，这里更改为`MySQL`，更改`~/bolg_project/blog/settings.py`文件
 
@@ -103,32 +93,78 @@ Running migrations:
   Applying sessions.0001_initial... OK
 ```
 
-## 1.6 查看项目
 
-```python
-(blog_env) [thorgeng@localhost blog_project]$ python3 manage.py runserver 0.0.0.0:8000
-Watching for file changes with StatReloader
-Performing system checks...
 
-System check identified no issues (0 silenced).
-March 20, 2021 - 14:13:16
-Django version 3.1.7, using settings 'blog.settings'
-Starting development server at http://0.0.0.0:8000/
-Quit the server with CONTROL-C.
-```
+# 2. 创建APP
 
-# 2. 创建应用程序
-
-在`Django`项目运行的同时，打开一个新的窗口，进入`Django`项目目录，激活虚拟环境，创建一个应用程序
+进入`Django`项目目录，创建一个APP，会生成APP文件夹，目录结构如下：
 
 
 ```python
-(blog_env) [thorgeng@localhost blog_project]$ python3 manage.py startapp blog_app
-(blog_env) [thorgeng@localhost blog_project]$ ls
-blog  blog_app  blog_env  manage.py
-(blog_env) [thorgeng@localhost blog_project]$ ls blog_app/
+$ python3 manage.py startapp app01
+$ ls
+first_project  app01  manage.py
+$ ls app01/
 admin.py  apps.py  __init__.py  migrations  models.py  tests.py  views.py   
 ```
+
+`migrations`---数据库字段变更
+
+`apps.py`---APP启动类
+
+`views.py`---函数【重要】
+
+`models.py`---对数据库操作【重要】
+
+# 3  快速入手
+
+- 确保APP已注册
+
+  `settings.py`中的`INSTALLED_APPS`
+
+- 编写URL和视图函数的对应关系【urls.py】
+
+- 编写视图函数【views.py】
+
+## 3.1  再写一个页面
+
+## 3.2 templates模板目录
+
+ 根据APP的注册顺序，在每个app下的templates目录下寻找对应的html文件
+
+##  3.3 静态文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##    2.1 定义模型
 
@@ -184,7 +220,7 @@ Running migrations:
   Applying blog_app.0001_initial... OK
 ```
 
-`django`在数据库中新建一个`blog_app_topic`的表，该表有三个字段，`id`,`text`,`date_added` ，对应`Topic`类的两个属性
+`django`会在数据库中根据`models.py`中定义的`Topic`类新建一个数据表，表名为`应用名_类名`，即`blog_app_topic`。该表有三个字段，`id`,`text`,`date_added` ，对应`Topic`类的两个属性
 
 ## 2.3 管理网站
 
