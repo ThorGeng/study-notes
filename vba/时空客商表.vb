@@ -1,31 +1,31 @@
-Attribute VB_Name = "Ê±¿Õ¿ÍÉÌ±í"
+Attribute VB_Name = "æ—¶ç©ºå®¢å•†è¡¨"
 Option Explicit
-'Dim cnn As ADODB.Connection     'Á¬½Ó¶ÔÏó±äÁ¿
-'Dim rs As ADODB.Recordset           '¼ÇÂ¼¼¯¶ÔÏó±äÁ¿
+'Dim cnn As ADODB.Connection     'è¿æ¥å¯¹è±¡å˜é‡
+'Dim rs As ADODB.Recordset           'è®°å½•é›†å¯¹è±¡å˜é‡
 
-Sub ¸üĞÂ¿ÍÉÌ±í()
-    '½«¹¤×÷±íÊı¾İ´æÈëÊı×é
-    Dim arr '±£´æĞèÒªµ¼ÈëµÄÊı¾İ
-    Dim brr 'ÓĞÎÊÌâÎ´µ¼ÈëµÄÊı¾İ
+Sub æ›´æ–°å®¢å•†è¡¨()
+    'å°†å·¥ä½œè¡¨æ•°æ®å­˜å…¥æ•°ç»„
+    Dim arr 'ä¿å­˜éœ€è¦å¯¼å…¥çš„æ•°æ®
+    Dim brr 'æœ‰é—®é¢˜æœªå¯¼å…¥çš„æ•°æ®
     Dim str
 	Dim cnn
 	Dim rs
-    arr = Sheets("¿ÍÉÌ±íÎ¬»¤").Range("A1").CurrentRegion
+    arr = Sheets("å®¢å•†è¡¨ç»´æŠ¤").Range("A1").CurrentRegion
     
     
-    '½¨Á¢Êı¾İ¿âÁ¬½Ó
+    'å»ºç«‹æ•°æ®åº“è¿æ¥
     Set cnn = CreateObject("adodb.connection")
     With cnn
         .Provider = "microsoft.ace.oledb.12.0"
-        .Open ThisWorkbook.Path & "\Ê±¿Õ¿ÍÉÌ±í.accdb"
+        .Open ThisWorkbook.Path & "\æ—¶ç©ºå®¢å•†è¡¨.accdb"
     End With
     
     Dim myTable As String, sql As String
-    myTable = "Ê±¿Õ¿ÍÉÌ±í"        'Ö¸¶¨Êı¾İ±íÃû
+    myTable = "æ—¶ç©ºå®¢å•†è¡¨"        'æŒ‡å®šæ•°æ®è¡¨å
     Dim i As Integer, j As Integer
     For i = 2 To UBound(arr)
         If arr(i, 2) <> "" Then
-                'MsgBox arr(i, 1) & "  µ¥Î»±àºÅÁĞ²»ÄÜÎª¿Õ!!", vbInformation, "ÌáÊ¾"
+                'MsgBox arr(i, 1) & "  å•ä½ç¼–å·åˆ—ä¸èƒ½ä¸ºç©º!!", vbInformation, "æç¤º"
                 'continue
                 'cnn.Close
                 'Set cnn = Nothing
@@ -36,7 +36,7 @@ Sub ¸üĞÂ¿ÍÉÌ±í()
             rs.Open sql, cnn, 1, 3
             
             If rs.RecordCount = 0 Then
-                'Èç¹ûÊı¾İ±íÖĞÃ»ÓĞ¹¤×÷±íÖĞÄ³ĞĞÊı¾İ£¬ÔòÌí¼ÓÊı¾İ
+                'å¦‚æœæ•°æ®è¡¨ä¸­æ²¡æœ‰å·¥ä½œè¡¨ä¸­æŸè¡Œæ•°æ®ï¼Œåˆ™æ·»åŠ æ•°æ®
                 rs.AddNew
                 For j = 1 To rs.Fields.Count
                     'rs.Fields(j - 1) = arr(i, j)
@@ -48,37 +48,37 @@ Sub ¸üĞÂ¿ÍÉÌ±í()
                 Next j
                 rs.Update
             Else
-                'Èç¹ûÊı¾İ±íÖĞÓĞ¹¤×÷±íÖĞÄ³ĞĞÊı¾İ£¬¾Í½«Êı¾İ½øĞĞ¸üĞÂ
+                'å¦‚æœæ•°æ®è¡¨ä¸­æœ‰å·¥ä½œè¡¨ä¸­æŸè¡Œæ•°æ®ï¼Œå°±å°†æ•°æ®è¿›è¡Œæ›´æ–°
                 'For j = 1 To rs.Fields.Count
                 '    rs.Fields(j - 1) = arr(i, j)
                 'Next j
                 'rs.Update
-                MsgBox arr(i, 1) & " ÒÑ´æÔÚÎ´±£´æ"
+                MsgBox arr(i, 1) & " å·²å­˜åœ¨æœªä¿å­˜"
             End If
             rs.Close
             Set rs = Nothing
         Else
-            MsgBox arr(i, 1) & "  µ¥Î»±àºÅÁĞ²»ÄÜÎª¿Õ!!", vbInformation, "ÌáÊ¾"
+            MsgBox arr(i, 1) & "  å•ä½ç¼–å·åˆ—ä¸èƒ½ä¸ºç©º!!", vbInformation, "æç¤º"
             str = str + arr(i, 1) + ","
             
         End If
     Next i
-    MsgBox "±£´æÍê±Ï¡£", vbInformation, "ÌáÊ¾"
-    Sheets("¿ÍÉÌ±íÎ¬»¤").Range("2:" & Rows.Count).Clear
+    MsgBox "ä¿å­˜å®Œæ¯•ã€‚", vbInformation, "æç¤º"
+    Sheets("å®¢å•†è¡¨ç»´æŠ¤").Range("2:" & Rows.Count).Clear
     If str <> "" Then
         brr = VBA.Split(str, ",")
         Debug.Print UBound(brr)
-        Sheets("¿ÍÉÌ±íÎ¬»¤").Range("A2").Resize(UBound(brr), 1) = Application.WorksheetFunction.Transpose(brr)
+        Sheets("å®¢å•†è¡¨ç»´æŠ¤").Range("A2").Resize(UBound(brr), 1) = Application.WorksheetFunction.Transpose(brr)
     End If
         
     
     cnn.Close
     Set cnn = Nothing
-    Call ²éÑ¯¿ÍÉÌ±í
+    Call æŸ¥è¯¢å®¢å•†è¡¨
     
 End Sub
 
-Sub ²éÑ¯¿ÍÉÌ±í()
+Sub æŸ¥è¯¢å®¢å•†è¡¨()
 	Dim cnn
 	Dim rs
     Dim sh As Worksheet
@@ -86,148 +86,148 @@ Sub ²éÑ¯¿ÍÉÌ±í()
     bool_skksb = False
     bool_ksbwh = False
     For Each sh In Worksheets
-        If sh.Name = "Ê±¿Õ¿ÍÉÌ±í" Then
+        If sh.Name = "æ—¶ç©ºå®¢å•†è¡¨" Then
             bool_skksb = True
         End If
-        If sh.Name = "¿ÍÉÌ±íÎ¬»¤" Then
+        If sh.Name = "å®¢å•†è¡¨ç»´æŠ¤" Then
             bool_ksbwh = True
         End If
     Next
     
     If bool_skksb = False Then
         Worksheets.Add
-        ActiveSheet.Name = "Ê±¿Õ¿ÍÉÌ±í"
+        ActiveSheet.Name = "æ—¶ç©ºå®¢å•†è¡¨"
     End If
     If bool_ksbwh = False Then
         Worksheets.Add
-        ActiveSheet.Name = "¿ÍÉÌ±íÎ¬»¤"
-        ActiveSheet.Range("A1") = "µ¥Î»Ãû³Æ"
-        ActiveSheet.Range("B1") = "µ¥Î»±àºÅ"
+        ActiveSheet.Name = "å®¢å•†è¡¨ç»´æŠ¤"
+        ActiveSheet.Range("A1") = "å•ä½åç§°"
+        ActiveSheet.Range("B1") = "å•ä½ç¼–å·"
     End If
     Dim arr
 	Set cnn = CreateObject("adodb.connection")
     With cnn
         .Provider = "microsoft.ace.oledb.12.0"
-        .Open ThisWorkbook.Path & "\Ê±¿Õ¿ÍÉÌ±í.accdb"
+        .Open ThisWorkbook.Path & "\æ—¶ç©ºå®¢å•†è¡¨.accdb"
     End With
     
     Dim sql As String
-    sql = "select * from Ê±¿Õ¿ÍÉÌ±í order by lrrq "
-    'Ö´ĞĞSQLÃüÁîÖ®ºó£¬ÌáÈ¡µ½µÄÊı¾İ»á±»¼ÓÔØµ½ÄÚ´æÖĞ
+    sql = "select * from æ—¶ç©ºå®¢å•†è¡¨ order by lrrq "
+    'æ‰§è¡ŒSQLå‘½ä»¤ä¹‹åï¼Œæå–åˆ°çš„æ•°æ®ä¼šè¢«åŠ è½½åˆ°å†…å­˜ä¸­
     'Set rs = New ADODB.Recordset
 	Set rs = CreateObject("adodb.recordset")
-    'rs = cnn.Execute(sql)       '½«¼ÇÂ¼¼¯´æµ½rsÖĞ
+    'rs = cnn.Execute(sql)       'å°†è®°å½•é›†å­˜åˆ°rsä¸­
     rs.Open sql, cnn, 1, 3
-    Sheets("Ê±¿Õ¿ÍÉÌ±í").Rows.Clear
-    '»ñÈ¡×Ö¶ÎÃû£¬Ê¹ÓÃÑ­»·
+    Sheets("æ—¶ç©ºå®¢å•†è¡¨").Rows.Clear
+    'è·å–å­—æ®µåï¼Œä½¿ç”¨å¾ªç¯
     Dim i As Integer
     For i = 0 To rs.Fields.Count - 1
-        Sheets("Ê±¿Õ¿ÍÉÌ±í").Cells(1, i + 1) = rs.Fields(i).Name
+        Sheets("æ—¶ç©ºå®¢å•†è¡¨").Cells(1, i + 1) = rs.Fields(i).Name
     Next
-    arr = Application.Transpose(rs.GetRows(, 1, Array("dwmc", "dwbh", "lrrq"))) '¼ÇÂ¼´æÈëÊı×é
-    Sheets("Ê±¿Õ¿ÍÉÌ±í").Range("A2").Resize(UBound(arr), 3) = arr
-    '½«¼ÇÂ¼¼¯rsÖĞµÄÊı¾İ·µ»Øµ½¹¤×÷±í
-    'Sheets("Ê±¿Õ¿ÍÉÌ±í").Range("A2").CopyFromRecordset rs
-    MsgBox "Ê±¿Õ¿ÍÉÌ±íÒÑË¢ĞÂ"
-    '4¡¢ÊÍ·Å¶ÔÏó±äÁ¿¿Õ¼ä
+    arr = Application.Transpose(rs.GetRows(, 1, Array("dwmc", "dwbh", "lrrq"))) 'è®°å½•å­˜å…¥æ•°ç»„
+    Sheets("æ—¶ç©ºå®¢å•†è¡¨").Range("A2").Resize(UBound(arr), 3) = arr
+    'å°†è®°å½•é›†rsä¸­çš„æ•°æ®è¿”å›åˆ°å·¥ä½œè¡¨
+    'Sheets("æ—¶ç©ºå®¢å•†è¡¨").Range("A2").CopyFromRecordset rs
+    MsgBox "æ—¶ç©ºå®¢å•†è¡¨å·²åˆ·æ–°"
+    '4ã€é‡Šæ”¾å¯¹è±¡å˜é‡ç©ºé—´
     rs.Close: Set rs = Nothing
     cnn.Close: Set cnn = Nothing
 
 End Sub
 
 '
-'Sub µ÷ÊÔ()
+'Sub è°ƒè¯•()
 '     Dim cnn
 '	 Dim rs
 '	 Set cnn = CreateObject("adodb.connection")
 '    'Set cnn = New ADODB.Connection
 '    With cnn
 '        .Provider = "microsoft.ace.oledb.12.0"
-'        .Open ThisWorkbook.Path & "\Ê±¿Õ¿ÍÉÌ±í.accdb"
+'        .Open ThisWorkbook.Path & "\æ—¶ç©ºå®¢å•†è¡¨.accdb"
 '    End With
 '
 '    Dim sql As String
-'    sql = "update Ê±¿Õ¿ÍÉÌ±í set lrrq = '" & Application.Text(Now(), "yyyy-mm-dd hh:mm:ss") & "'"
-'    'Ö´ĞĞSQLÃüÁîÖ®ºó£¬ÌáÈ¡µ½µÄÊı¾İ»á±»¼ÓÔØµ½ÄÚ´æÖĞ
+'    sql = "update æ—¶ç©ºå®¢å•†è¡¨ set lrrq = '" & Application.Text(Now(), "yyyy-mm-dd hh:mm:ss") & "'"
+'    'æ‰§è¡ŒSQLå‘½ä»¤ä¹‹åï¼Œæå–åˆ°çš„æ•°æ®ä¼šè¢«åŠ è½½åˆ°å†…å­˜ä¸­
 '    'Set rs = New ADODB.Recordset
 '     Set rs = CreateObject("adodb.recordset")
-'    'rs = cnn.Execute(sql)       '½«¼ÇÂ¼¼¯´æµ½rsÖĞ
+'    'rs = cnn.Execute(sql)       'å°†è®°å½•é›†å­˜åˆ°rsä¸­
 '    rs.Open sql, cnn, adOpenKeyset, adLockOptimistic
 '    'rs.Close: Set rs = Nothing
 '    cnn.Close: Set cnn = Nothing
 '
 'End Sub
 
-Sub ¸üĞÂ½ğµû¹©Ó¦ÉÌ()
+Sub æ›´æ–°é‡‘è¶ä¾›åº”å•†()
     Dim cnn
     Dim rs
     Dim mrows,sql
-    'Á¬½Ó½ğµû¹©Ó¦ÉÌ±í
-	mrows = Sheets("¹©Ó¦ÉÌ").UsedRange.rows.Count
+    'è¿æ¥é‡‘è¶ä¾›åº”å•†è¡¨
+	mrows = Sheets("ä¾›åº”å•†").UsedRange.rows.Count
     If mrows <= 1 Then
         mrows = 2
     End If
-    Sheets("¹©Ó¦ÉÌ").Range("2:" & mrows).Clear
-    '½¨Á¢Êı¾İ¿âÁ¬½Ó
+    Sheets("ä¾›åº”å•†").Range("2:" & mrows).Clear
+    'å»ºç«‹æ•°æ®åº“è¿æ¥
     Set cnn = CreateObject("adodb.connection")
     
     cnn.ConnectionString = "DRIVER={ODBC Driver 18 for SQL Server};Encrypt=yes;TrustServerCertificate=yes;Server=192.168.0.42;Database=AIS20150122160957;Uid=sa;Pwd=123"
     cnn.Open
-    'MsgBox "³É¹¦"
+    'MsgBox "æˆåŠŸ"
     sql = "select Fname,F_102,Fnumber from t_supplier"
     Set rs = CreateObject("adodb.recordset")
     rs.Open sql, cnn, 1, 3
-    Sheets("¹©Ó¦ÉÌ").Range("A2").CopyFromRecordset rs
+    Sheets("ä¾›åº”å•†").Range("A2").CopyFromRecordset rs
     
     rs.Close
     Set rs = Nothing
     cnn.Close
     Set cnn = Nothing
 
-    'É¾³ı¿Õ¸ñ
-    Sheets("¹©Ó¦ÉÌ").Activate
-    Sheets("¹©Ó¦ÉÌ").Columns("A:A").Select
+    'åˆ é™¤ç©ºæ ¼
+    Sheets("ä¾›åº”å•†").Activate
+    Sheets("ä¾›åº”å•†").Columns("A:A").Select
     Selection.Replace What:=" ", Replacement:="", LookAt:=xlPart, _
         SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
         ReplaceFormat:=False
-    'ÌáÊ¾
-    MsgBox "ÒÑ¸üĞÂ"
+    'æç¤º
+    MsgBox "å·²æ›´æ–°"
 End Sub
 
-Sub ¸üĞÂ½ğµû¿Í»§()
+Sub æ›´æ–°é‡‘è¶å®¢æˆ·()
     Dim cnn
     Dim rs
     Dim mrows,sql
-    'Á¬½Ó½ğµû¿Í»§±í
-	mrows = Sheets("¿Í»§").UsedRange.rows.Count
+    'è¿æ¥é‡‘è¶å®¢æˆ·è¡¨
+	mrows = Sheets("å®¢æˆ·").UsedRange.rows.Count
     If mrows <= 1 Then
         mrows = 2
     End If
-    Sheets("¿Í»§").Range("2:" & mrows).Clear
-    '½¨Á¢Êı¾İ¿âÁ¬½Ó
+    Sheets("å®¢æˆ·").Range("2:" & mrows).Clear
+    'å»ºç«‹æ•°æ®åº“è¿æ¥
     Set cnn = CreateObject("adodb.connection")
     
     cnn.ConnectionString = "DRIVER={ODBC Driver 18 for SQL Server};Encrypt=yes;TrustServerCertificate=yes;Server=192.168.0.42;Database=AIS20150122160957;Uid=sa;Pwd=123"
     cnn.Open
-    'MsgBox "³É¹¦"
+    'MsgBox "æˆåŠŸ"
     sql = "select Fname,F_102,Fnumber from t_Organization"
     Set rs = CreateObject("adodb.recordset")
     rs.Open sql, cnn, 1, 3
-    Sheets("¿Í»§").Range("A2").CopyFromRecordset rs
+    Sheets("å®¢æˆ·").Range("A2").CopyFromRecordset rs
     
     rs.Close
     Set rs = Nothing
     cnn.Close
     Set cnn = Nothing
     
-    'É¾³ı¿Õ¸ñ
-    Sheets("¿Í»§").Activate
-    Sheets("¿Í»§").Columns("A:A").Select
+    'åˆ é™¤ç©ºæ ¼
+    Sheets("å®¢æˆ·").Activate
+    Sheets("å®¢æˆ·").Columns("A:A").Select
     Selection.Replace What:=" ", Replacement:="", LookAt:=xlPart, _
         SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
         ReplaceFormat:=False
     
-    MsgBox "ÒÑ¸üĞÂ"
+    MsgBox "å·²æ›´æ–°"
 End Sub
 
 
