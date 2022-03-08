@@ -8,7 +8,6 @@ import win32com.client
 def readExcel(path):
     """
     根据excel文件路径读取文件内容
-    
     """
     xls_file = path
     print(path)
@@ -71,24 +70,23 @@ def connectAccess():
     print("连接成功")
         
 def closeAccess():
+    """ 
+    关闭数据库连接
+    """
     conn.Close()
    
 def writeAccess(fplx,fpxx,hwxx):
-    
-    
-    
+    """
+    将读取到的发票信息及货物信息写入数据库
+    """    
     for jym in fpxx.keys():
-        #print(jym)
         sql = "select * from 发票信息 where 校验码='" + jym + "'"
         rs= win32com.client.Dispatch(r"ADODB.Recordset")
         rs.Open(sql,conn,1,3)
-        #print(rs.RecordCount)
         if rs.RecordCount == 0:
-            #print(sr[2]+"未导入")
             rs.AddNew()
             if fplx =="增值税普通发票（电子）":
                 for i in range(rs.Fields.Count-5):
-                    #print(i)
                     rs.Fields.Item(i).value=fpxx[jym][i]
                 rs.Fields.Item(18).value=fpxx[jym][19]
                 rs.Fields.Item(19).value=fpxx[jym][20]
@@ -105,15 +103,11 @@ def writeAccess(fplx,fpxx,hwxx):
             rs_hw.Open(sql,conn,1,3)
             
             dmhm = fpxx[jym][0]+fpxx[jym][1]
-            #print(len(hwxx[dmhm]))
             for i in range(len(hwxx[dmhm])):
-                #print(len(hwxx[dmhm][i]))
                 rs_hw.AddNew()
                 rs_hw.Fields.Item(0).value=fpxx[jym][0]
                 rs_hw.Fields.Item(1).value=fpxx[jym][1]
-                #print(
                 for j in range(2,rs_hw.Fields.Count):
-                    #print(j)
                     rs_hw.Fields.Item(j).value = hwxx[dmhm][i][j-2]
             rs_hw.Update()
             
