@@ -25,3 +25,18 @@ While Len(Sheet1.Cells(row, 5)) <> 0 '判断第row行第5列是否为空，
 		'对每一行数据进行操作
         row = row + 1   
 Wend
+
+'Excel设置目录代码
+'根据工作表名设置目录
+Sub test()
+Dim i As Integer
+i = 1
+For Each sh In ThisWorkbook.Sheets
+    
+  '  Cells(i, 1) = sh.Name
+    ActiveSheet.Hyperlinks.Add Anchor:=Cells(i, 1), Address:="", SubAddress:="'" & sh.Name & "'!A1", TextToDisplay:=sh.Name
+    'ActiveSheet.Hyperlinks.Add Anchor:=Cells(i, 1), Address:=sh
+    i = i + 1
+Next
+
+End Sub
