@@ -1,4 +1,4 @@
-{% load static %}
+
 <!DOCTYPE html>
 <html lang='en'>
     <head>
@@ -6,7 +6,7 @@
     </head>
     <body>
         {% for row in hello %}
-			<h1>{row.username}---{{row.age}}</h1>
+			<h1>{{row.username}}---{{row.age}}</h1>
 		{% endfor %}
         
     </body>
