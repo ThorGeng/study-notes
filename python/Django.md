@@ -18,17 +18,21 @@ $ ls first_project
 asgi.py  __init__.py  settings.py  urls.py  wsgi.py
 ```
 
-`manage.py`---项目的管理、启动项目、创建APP、数据管理
+```
+manage.py---项目的管理、启动项目、创建APP、数据管理
 
-`__init__.py`---
+__init__.py---
 
-`settings.py`---项目配置文件，经常操作
+settings.py---项目配置文件，经常操作
 
-`urls.py`---URL和函数的对应关系，经常操作
+urls.py---URL和函数的对应关系，经常操作
 
-`wsgi.py`---接受网络请求
+wsgi.py---接受网络请求
 
-`asgi.py`---接受网络请求
+asgi.py---接受网络请求
+```
+
+
 
 ## 1.3 创建数据库
 
@@ -126,6 +130,12 @@ admin.py  apps.py  __init__.py  migrations  models.py  tests.py  views.py
 
 - 编写视图函数【views.py】
 
+  `urls.py`中定义`url`（网址）与views中函数（`views.py`中的函数）的对应关系，
+
+  `views.py`中定义函数，`return` 通过`render(request,"index.html")`调用html文件
+
+  `index.html`存放在`templates`目录中，调用时，根据APP的注册顺序在每个app下的templates目录下寻找对应的html文件
+
 ## 3.1  再写一个页面
 
 ## 3.2 templates模板目录
@@ -134,7 +144,19 @@ admin.py  apps.py  __init__.py  migrations  models.py  tests.py  views.py
 
 ##  3.3 静态文件
 
+默认情况下存放在APP下的`/static/`文件夹下
 
+##  3.4  模板文件语法
+
+
+
+```html
+{%  static  %}
+
+{% for i in list %}
+
+{% endfor %}
+```
 
 
 

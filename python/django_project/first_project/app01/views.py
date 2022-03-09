@@ -7,7 +7,10 @@ def index(requset):
 
 
 def user_list(request):
-    return render(request,"user_list.html")
+    user = []
+    for i in range(20):
+        user.append({'username':'jack'+str(i),'age':18+i})
+    return render(request,"user_list.html",{'hello':user})
 
 def user_add(request):
     return HttpResponse("添加用户")
