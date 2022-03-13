@@ -96,7 +96,9 @@ def user_edit(request,nid):
     form = UserModelForm(request.POST,instance=obj)
     if form.is_valid():
         form.save()
-        return redirect("/user/list/")    
+        return redirect("/user/list/")
+    else:
+        return render(request,"user_edit.html",{"form":form}) 
 
 def user_delete(request,nid):
     """删除用户"""

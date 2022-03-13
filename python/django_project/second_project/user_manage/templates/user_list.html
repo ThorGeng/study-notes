@@ -47,7 +47,7 @@
                             <th>{{ obj.age }}</th>
                             <th>{{ obj.account }}</th>
                             <th>{{ obj.create_time|date:"Y-m-d" }}</th>
-                            <th>{{ obj.depart.title}}</th> <!--注意这个地方部门的取值，外键-->
+                            <th>{{ obj.depart.title}}</th> <!--注意这个地方“部门”的取值，外键-->
                             <th>
                                 <a class = "btn btn-primary btn-xs" href="/user/{{ obj.id }}/edit/">编辑</a>
                                 <a class = "btn btn-danger btn-xs" href="/user/{{ obj.id }}/delete/">删除</a>
