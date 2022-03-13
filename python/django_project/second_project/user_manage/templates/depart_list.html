@@ -1,0 +1,49 @@
+{% extends "layout_depart.html" %}
+
+{% block content%}   
+    <div class="container">
+              <div style="margin-bottom: 10px;">
+                  <a class = "btn btn-success" href="/depart/add/" >
+                      
+                      <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                      新建部门
+                    </a>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                    
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                    部门列表
+                </div>
+                <table class = "table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </th>
+                            <th>部门</th>
+                            <th>操作</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for obj in queryset %}
+                        <tr>
+                            
+                            <th>
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            </th>
+                            <th>{{ obj.title }}</th>
+                            <th>
+                                <a class = "btn btn-primary btn-xs" href="/depart/{{ obj.id }}/edit/">编辑</a>
+                                <a class = "btn btn-danger btn-xs" href="/depart/{{ obj.id }}/delete/">删除</a>
+                            </th>
+                            
+                        </tr>
+                        {% endfor%}
+                    </tbody>
+                </table>
+              </div>
+    </div>
+{% endblock%}
