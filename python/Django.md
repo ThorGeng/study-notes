@@ -25,7 +25,7 @@ __init__.py---
 
 settings.py---项目配置文件，经常操作
 
-urls.py---URL和函数的对应关系，经常操作
+urls.py---URL和函数的对应关系（路由），经常操作
 
 wsgi.py---接受网络请求
 
@@ -38,7 +38,7 @@ asgi.py---接受网络请求
 
 # 2. 创建APP
 
-进入`Django`项目目录，创建一个APP，会生成APP文件夹，目录结构如下：
+进入`Django`项目目录`first_project`，创建一个APP，会生成APP文件夹，目录结构如下：
 
 
 ```python
@@ -63,9 +63,50 @@ admin.py  apps.py  __init__.py  migrations  models.py  tests.py  views.py
 
   `settings.py`中的`INSTALLED_APPS`
 
-- 编写URL和视图函数的对应关系【urls.py】
+  ```python
+  INSTALLED_APPS = [
+      'django.contrib.admin',
+      'django.contrib.auth',
+      'django.contrib.contenttypes',
+      'django.contrib.sessions',
+      'django.contrib.messages',
+      'django.contrib.staticfiles',
+      'app01.apps.App01Config', #注册创建的APP
+  ]
+  ```
 
-- 编写视图函数【views.py】
+  
+
+- 编写URL和视图函数的对应关系【`.\first_project\urls.py`】(根路由)
+
+  ```PYTHON
+  from django.contrib import admin
+  from django.urls import path
+  from app01 import views   
+  
+  urlpatterns = [
+      path('admin/', admin.site.urls),
+      path('index/', views.index),  #浏览器网址url为index/时，执行app01中views.py内的index函数
+      path('user/list/',views.user_list),
+      path('user/add/',views.user_add),
+      path('login/',views.login),  
+  ]
+  ```
+
+  `views.py`
+
+  ```python
+  from django.http import HttpResponse
+  from django.shortcuts import render
+  import requests
+  # Create your views here.
+  def index(requset):
+      return render(request,"index.html")   #调用html文件
+  ```
+
+  
+
+- 编写视图函数【`views.py`】
 
   `urls.py`中定义`url`（网址）与views中函数（`views.py`中的函数）的对应关系，
 
@@ -77,7 +118,7 @@ admin.py  apps.py  __init__.py  migrations  models.py  tests.py  views.py
 
 ## 3.2 templates模板目录
 
- 根据APP的注册顺序，在每个app下的templates目录下寻找对应的html文件
+ 根据APP的注册顺序，在每个app下的`templates`目录下寻找对应的html文件
 
 ##  3.3 静态文件
 
@@ -118,8 +159,6 @@ def user_list(request):
     </body>
 </html>
 ```
-
-
 
 # 4.数据库操作
 
@@ -178,6 +217,38 @@ $ python manage.py migrate
 ```
 
 ## 4.5 操作表中的数据
+
+```python
+from user_manage import models
+# 查询user_manage中的全部数据
+queryset=models.Department.objects.all()
+#增加数据
+models.Department.objects.create(title=title)
+#删除数据
+models.Department.objects.filter(id=nid).delete()
+#更改数据
+models.Department.objects.filter(id=nid).update(title=title)
+```
+
+## 4.6 `ModelForm`表单
+
+```python
+class UserModelForm(forms.ModelForm):
+    class Meta:
+        model=models.UserInfo
+        fields=["name","gender","password","age","account","create_time","depart"]
+        # fields="__all__"
+        # widgets={
+        #     "name":forms.TextInput(attrs={"class":"form-control"})
+        # }
+    def __init__(self,*args,**kwargs):
+        #为ModelForm设置样式
+        super().__init__(*args,**kwargs)
+        for name,field in self.fields.items():
+            field.widget.attrs={"class":"form-control"}
+```
+
+
 
 
 
