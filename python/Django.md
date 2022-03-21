@@ -193,7 +193,7 @@ DATABASES= {
 }
 ```
 
-## 4.4 创建数据表
+## 4.4	创建数据表
 
 在`models.py`文件中添加类：
 
@@ -216,7 +216,7 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
-## 4.5 操作表中的数据
+## 4.5	操作表中的数据
 
 ```python
 from user_manage import models
