@@ -37,7 +37,7 @@ del name
 >>> type(num)
 <class 'float'>
 ```
-## 2.3 字符串""
+## 2.3 字符串
 ```python
 >>> name = "thorgeng"
 >>> type(name)
@@ -67,11 +67,14 @@ thqrgeng
 THORGENG
 >>> print(name.title())
 Thorgeng
+>>> print("正在录入凭证:{}---->{}".format(old_id,new_id))	#格式化输出字符串
+>>>	print(datetime.strftime('%Y-%m-%d'))	#格式化输出日期
 
 ```
 ## 2.4 布尔型
 `True`
 `False`
+
 ## 2.5 列表list[]
 ```python
 >>> names= []
@@ -414,7 +417,7 @@ f.write(new_data)
 f.close()
 ```
 
-## 6.6实例
+## 6.6	实例
 
 - 全局文本检索替换
 
@@ -481,7 +484,26 @@ while True:
 #rint(accounts)a
 f.close()
 ```
+- 读写`json`文件
+
+```python
+import json
+
+#读取json文件，有中文必须加参数encoding='utf-8'
+with open("settings.json",'r',encoding='utf-8') as f:
+        info = json.load(f)
+
+#写入json文件，有中文必须加参数encoding='utf-8'，ensure_ascii=False
+#indent=4  缩进4   输出美观
+with open ('settings.json','w',encoding="utf-8") as f:
+    json.dump(account_info,f,ensure_ascii=False,indent=4)
+
+```
+
+  
+
 # 7	函数编程
+
 ## 7.1 函数的特性
 - 减少重复代码
 - 使程序变得可扩展
@@ -638,27 +660,55 @@ my_tesla.battery.describle_battery()
 
 ### 10.1.1	属性
 
+```python
+wb.sheetnames		#工作簿的所有工作表名
+```
+
 
 
 ### 10.1.2	方法
 
-`create_sheet(title,index)`---	在`index`位置创建`sheet`
+```python
+create_sheet(title,index)	#在index位置创建sheet
+```
+
+
 
 
 
 ## 10.2	`Sheet`对象
 
+```python
+ws = wb["sheet1"]
+max = ws.max_row	#工作表使用的最大行，可能会包含显示为空的行 
+ws = iter_rows(min_row=None, max_row=None, min_col=None, max_col=None)
+#返回指定单元格区域
+
+wb.sheetnames	
+```
+
+
+
 ## 10.3	`Cell`对象
 
+```python
+cell(row,col).value	#单元格的值
+```
 
 
-## 10.2	操作`Excel`文件
+
+
+
+## 10.4	操作`Excel`文件
 
 ```python
 import openpyxl 
 
 wb=Workbook()	#新建工作簿
 wb=load_workbook(path)	#打开工作簿
+#打开xlsm格式的excel
+wb = openpyxl.load_workbook(path, keep_vba=True, data_only=True)
+
 print(wb.sheetnames)
 
 ws = wb.active		#选定工作表
@@ -679,6 +729,69 @@ ws.append=[1,2,3,4]
 # 11	`PyMuPDF`包
 
 
+
+# 12	`Pymouse`与`Pykeyboard`
+
+## 12.1	安装
+
+```bash
+$ pip install PyUserInput
+```
+
+## 12.2	使用
+
+```python
+from pymouse import PyMouse
+from pykeyboard import PyKeyboard
+mouse = PyMouse()
+keyboard = PyKeyboard()
+#鼠标操作
+mouse.click(113,240,1)	#点击鼠标
+mouse.position()		#返回鼠标位置
+
+#键盘操作
+keyboard.tap_key(keyboard.enter_key)	#按下回车
+keyboard.press_key(keyboard.control_key)		#
+keyboard.tap_key('v')							#
+keyboard.release_key(keyboard.control_key)		#Ctrl+V
+keyboard.type_string(string)			#输入字符串，仅支持英文数字，不支持中文
+
+
+#想要输入汉字需要配合pyperclip和ctrl+v使用
+import pyperclip
+pyperclip.copy(string)
+keyboard.press_key(keyboard.control_key)
+keyboard.tap_key('v')
+keyboard.release_key(keyboard.control_key)
+
+```
+
+
+
+
+
+# 附录	即拿即用函数
+
+1. 判断字符是否是中文？：
+
+   ```python
+   def is_chinese_char(k):
+       """判断字符是否是中文，是则返回True"""
+       cp = ord(k)
+       if ((cp >= 0x4E00 and cp <= 0x9FFF) or  #
+               (cp >= 0x3400 and cp <= 0x4DBF) or  #
+               (cp >= 0x20000 and cp <= 0x2A6DF) or  #
+               (cp >= 0x2A700 and cp <= 0x2B73F) or  #
+               (cp >= 0x2B740 and cp <= 0x2B81F) or  #
+               (cp >= 0x2B820 and cp <= 0x2CEAF) or
+               (cp >= 0xF900 and cp <= 0xFAFF) or  #
+               (cp >= 0x2F800 and cp <= 0x2FA1F)):  #
+           return True
+   
+       return False
+   ```
+
+   
 
 
 
