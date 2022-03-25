@@ -207,7 +207,9 @@ class UserInfo(models.Model):
     age = models.IntegerField()
 ```
 
-ORM会根据上述类的定义，在数据库中建立对应的表，表名为`APP名_类名`，即`app01_userinfo`
+`ORM`会根据上述类的定义，在数据库中建立对应的表，表名为`APP名_类名`，即`app01_userinfo`
+
+同时同时会自动生成定义的字段
 
 执行命令生成表：
 

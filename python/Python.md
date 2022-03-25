@@ -646,15 +646,18 @@ my_tesla.get_descriptive_name()
 my_tesla.battery.describle_battery()
 ```
 
-# 9	os包
+# 9	`os`
 
-`os.getcwd()`返回当前路径
+```
+os.getcwd()		返回当前路径
+os.path
+```
 
 
 
 
 
-# 10	`openpyxl`包
+# 10	`openpyxl`
 
 ## 10.1	`Workbook`对象
 
@@ -726,7 +729,7 @@ ws.append=[1,2,3,4]
 
 
 
-# 11	`PyMuPDF`包
+# 11	`PyMuPDF`
 
 
 
@@ -769,6 +772,88 @@ keyboard.release_key(keyboard.control_key)
 ```
 
 
+
+# 13	`requests`
+
+- `GET`请求
+
+```python
+import requests
+response = requests.get("https://www.baidu.com")
+print(response)               # <Response [200]>  200表示成功
+"""
+response.text 	读取服务器响应的内容,一般为网页源码
+response.encoding 	获取文本编码，utf-8/ISO-8859-1
+response.content 获取响应内容的二进制形式，一般图片、音视频等使用此方式获取
+response.status_code 获取当前请求的响应码
+response.headers 获取响应的响应头
+response.cookies 获取响应的cookies内容
+response.url 获取请求的url
+"""
+```
+```python
+"""带请求头的请求"""
+headers = {"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36'}
+requests.get(url, headers=headers)
+```
+```python
+import requests
+headers = {"User-Agent": "ozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36"}
+
+"""带参数的请求"""
+#方法一
+url = 'https://www.baidu.com/s?wd=Python'
+# url中包含了请求参数，即在请求链接处？位置后面就是携带的参数
+response = requests.get(url, headers=headers)
+print(response.text)
+#方法二
+url = 'https://www.baidu.com/s' 
+# 请求参数是一个字典 即wd=Python和pn=10
+params = {'wd':'Python','pn':10} 
+# 在params上设置字典
+response = requests.get(url, headers=headers, params=params) 
+print(response.text)
+```
+
+- `POST`请求
+
+用法：
+
+```python
+response = requests.post(url, data = 字典类型的参数,headers=字典类型的请求头)
+```
+
+```python
+import requests  
+# 字典类型的表单参数
+data = {
+    'a': '好好学习，天天向上！',
+    'b': '强身健体，天天Happy'
+}
+response = requests.post('http://httpbin.org/post', data=data)
+print(response.json()) #打印转换后的响应数据
+```
+
+- 代理`IP`的使用
+
+**为什么要使用代理？**
+
+为了让服务器认为不是同一个客户端在请求，因为同一个客户端的ip地址是固定不变的，使用ip代理就可以不断的切换ip地址，这样就可以防止我们的真实地址被泄露，甚至被追究。
+
+```python
+import requests
+import random
+
+url = "https://www.baidu.com"
+# 获取的代理ip地址，放在一个字典中，可以写多个使用随机数不断变化选取
+# 注意：免费代理的地址是有失效时间的，自己可以去上面网站找合适的
+ips = ['221.222.84.131:9000','124.42.7.103:80','116.214.32.51:8080','222.73.68.144:8090','117.121.100.9:3128']
+proxy = {
+    'http': random.choice(ips),
+}
+response = requests.get(url, proxies=proxy)
+print(response.text)
+```
 
 
 
