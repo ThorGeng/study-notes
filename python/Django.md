@@ -162,13 +162,13 @@ def user_list(request):
 
 # 4.数据库操作
 
-## 4.1安装mysqlclient
+## 4.1	安装`mysqlclient`
 
 ```bash
 $ pip install mysqlclient
 ```
 
-## 4.2 创建数据库
+## 4.2 	创建数据库
 
 ```sql
 CREATE DATABASE `first_project_data` CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
@@ -176,7 +176,7 @@ CREATE DATABASE `first_project_data` CHARACTER SET 'utf8' COLLATE 'utf8_general_
 
 
 
-## 4.3 配置数据库
+## 4.3 	配置数据库
 
 `Django`默认使用`sqlite3`，要更改为`MySQL`，需在更改`.\first_project\settings.py`文件
 
@@ -250,7 +250,13 @@ class UserModelForm(forms.ModelForm):
             field.widget.attrs={"class":"form-control"}
 ```
 
+## 4.6	`Cookie`和 `Session`
 
+## 4.7	中间件
+
+## 4.8	分页组件
+
+## 4.9	`Ajax`请求
 
 
 
