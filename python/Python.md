@@ -388,9 +388,9 @@ for line in f:
 f.open("454454.jpg",encoding="gbk") #以哪种编码模式打开文件
 f.open("454454.jpg","rb") #二进制只读模式打开文件
 ```
-- rb 二进制只读模式
-- wb 二进制创建模式
-- ab  二进制追加模式
+- `rb` 二进制只读模式
+- `wb` 二进制创建模式
+- `ab ` 二进制追加模式
 ## 6.4 其他功能
 ```python
 f.seek()  #移动文件读取指针到文件指定位置
@@ -751,9 +751,11 @@ mouse.position()		#返回鼠标位置
 
 #键盘操作
 keyboard.tap_key(keyboard.enter_key)	#按下回车
+
 keyboard.press_key(keyboard.control_key)		#
 keyboard.tap_key('v')							#
 keyboard.release_key(keyboard.control_key)		#Ctrl+V
+
 keyboard.type_string(string)			#输入字符串，仅支持英文数字，不支持中文
 
 
