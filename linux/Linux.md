@@ -1,5 +1,9 @@
 Linux
 
+
+
+https://wangchujiang.com/linux-command/c/git.html   linux命令查询
+
 # 1.基本命令安装
 
 ## 安装ifconfig
@@ -130,6 +134,8 @@ port=3306
 [root@localhost mysql]# chmod +x /etc//rc.d/init.d/mysqld 
 ```
 
+**CentOS 7 之前的用法**
+
 此时mysql server已经交给service和chkconfig管理 
 
 可通过service mysqld start/stop/restart命令控制启动/关闭/重启 
@@ -197,3 +203,6 @@ success
 
 ```
 
+# 5.	内网穿透方案
+
+# 6.
