@@ -288,3 +288,27 @@ $ make install
 
 # 4.	Python
 
+## 4.1	安装
+
+- 安装依赖
+
+```bash
+$ yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel libffi-devel
+
+```
+
+- 下载，解压，进入解压目录
+
+```bash
+$ ./configure --prefix=/usr/local/python3.10
+```
+
+可能存在的问题：
+
+openssl  版本不对
+
+![image-20220330004510776](C:\Users\ThorGeng\AppData\Roaming\Typora\typora-user-images\image-20220330004510776.png)
+
+安装openssl 后运行失败 需要安装zlib  
+
+![image-20220330004532063](C:\Users\ThorGeng\AppData\Roaming\Typora\typora-user-images\image-20220330004532063.png)
