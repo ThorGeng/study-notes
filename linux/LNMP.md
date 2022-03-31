@@ -247,7 +247,7 @@ $ yum install -y openssl openssl-devel
 3. 解压
 
 ```shell
-$ tar -zxvf nginx-1.16.1.tar.gz
+$ tar -zxvf nginx-1.20.2.tar.gz
 ```
 
 4. 创建`makefile`
@@ -265,6 +265,10 @@ $ ./configure \
 --http-fastcgi-temp-path=/var/temp/nginx/fastcgi \     #fastcgi临时目录
 --http-uwsgi-temp-path=/var/temp/nginx/uwsgi \    	   #uwsgi临时目录
 --http-scgi-temp-path=/var/temp/nginx/scgi			   #scgi临时目录
+--with-openssl=/usr/local/openssl-1.0.1j \ #指定openssl路径
+--with-http_ssl_module  	#开启ssl模块
+
+./configure --prefix=/usr/local/nginx --pid-path=/var/run/nginx/nginx.pid --lock-path=/var/lock/nginx.lock --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-http_gzip_static_module --http-client-body-temp-path=/var/temp/nginx/client --http-proxy-temp-path=/var/temp/nginx/proxy --http-fastcgi-temp-path=/var/temp/nginx/fastcgi --http-uwsgi-temp-path=/var/temp/nginx/uwsgi --http-scgi-temp-path=/var/temp/nginx/scgi --with-openssl=/usr/local/openssl1.1.1 --with-http_ssl_module
 ```
 
 5. 编译 & 安装
@@ -272,9 +276,77 @@ $ ./configure \
 ```shell
 $ make
 $ make install
+
 ```
 
+![1648611626899](E:\git\study-notes\linux\1648611626899.png)
+
 6. 启动`nginx`
+
+```bash
+$ /usr/local/nginx/sbin/nginx  #启动
+$ /usr/local/nginx/sbin/nginx -s stop  #停止
+$ /usr/local/nginx/sbin/nginx -s reload #重启
+```
+
+7. 测试
+
+```bash
+$ curl http://127.0.0.1:80 -Iv
+$ curl -g http://[::1]:80 -Iv
+
+```
+
+
+
+
+
+## 2.3 可能出现的错误提示
+
+- make 时提示`[/usr/local/openssl1.1.1/.openssl/include/openssl/ssl.h]错误 127`
+
+  解决方法：
+
+  ```bash
+  #修改nginx源文件下./auto/lib/openssl/conf文件
+  CORE_INCS="$CORE_INCS $OPENSSL/.openssl/include"
+  CORE_DEPS="$CORE_INCS $OPENSSL/.openssl/include/openssl/ssl.h"
+  CORE_LIBS="$CORE_INCS $OPENSSL/.openssl/lib/libssl.a"
+  CORE_LIBS="$CORE_INCS $OPENSSL/.openssl/lib/libcrypto.a"
+  CORE_LIBS="$CORE_INCS $NGX_LIBDL"
+  >>>>
+  CORE_INCS="$CORE_INCS $OPENSSL/include"
+  CORE_DEPS="$CORE_INCS $OPENSSL/include/openssl/ssl.h"
+  CORE_LIBS="$CORE_INCS $OPENSSL/lib/libssl.a"
+  CORE_LIBS="$CORE_INCS $OPENSSL/lib/libcrypto.a"
+  CORE_LIBS="$CORE_INCS $NGX_LIBDL"
+  #修改之后重新configure make
+  ```
+
+- 启动时提示找不到`temp`文件夹
+
+  ```bash
+  #手动创建相关文件夹
+  mkdir /var/temp/nginx/client
+  mkdir /var/temp/nginx/proxy
+  mkdir /var/temp/nginx/fastcgi
+  mkdir /var/temp/nginx/uwsgi
+  mkdir /var/temp/nginx/scgi
+  ```
+
+- 开启IPV6监听
+
+```bash
+$ vim /usr/local/nginx/conf/nginx.conf
+...
+server{
+	listen 80;
+	listen [::1]:80 ipv6only=on;
+	...
+}
+...
+#设置完后重启
+```
 
 
 
@@ -297,10 +369,21 @@ $ yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel
 
 ```
 
-- 下载，解压，进入解压目录
+- 下载，解压，
+- 处理openssl问题
+
+```bash
+#修改./Modules/Setup文件
+
+```
+
+
+
+- 进入解压目录
 
 ```bash
 $ ./configure --prefix=/usr/local/python3.10
+#configure 完成后往前翻看是否有modules缺失的信息，若有需安装相应文件，重新configure
 ```
 
 可能存在的问题：
@@ -312,3 +395,17 @@ openssl  版本不对
 安装openssl 后运行失败 需要安装zlib  
 
 ![image-20220330004532063](C:\Users\ThorGeng\AppData\Roaming\Typora\typora-user-images\image-20220330004532063.png)
+
+### 4.1.1	安装zlib 
+
+安装`openssl `后运行失败 需要提前安装`zlib`
+
+下载源码
+
+安装静态库
+
+安装共享库
+
+### 4.1.2	安装openssl
+
+下载源码，安装，
