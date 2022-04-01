@@ -231,7 +231,7 @@ SELINUX=disabled
 
 ## 2.1	安装
 
-1. 去官网http://nginx.org/下载对应的nginx包，推荐使用稳定版本
+1. 去官网http://nginx.org/下载对应的nginx包，推荐使用稳定版本http://nginx.org/download/nginx-1.20.2.tar.gz
 
 2. 安装依赖环境
 
@@ -247,12 +247,14 @@ $ yum install -y openssl openssl-devel
 3. 解压
 
 ```shell
-$ tar -zxvf nginx-1.20.2.tar.gz
+$ tar -zxvf nginx-1.20.2.tar.gz -C /tmp
+$ cd /tmp/nginx-1.20.2
 ```
 
 4. 创建`makefile`
 
 ```shell
+# 若使用的不是原装的openssl 需要修改文件  不然make时出错
 $ ./configure \   
 --prefix=/usr/local/nginx \    #指定nginx安装目录
 --pid-path=/var/run/nginx/nginx.pid \    #指向nginx的pid
@@ -265,10 +267,32 @@ $ ./configure \
 --http-fastcgi-temp-path=/var/temp/nginx/fastcgi \     #fastcgi临时目录
 --http-uwsgi-temp-path=/var/temp/nginx/uwsgi \    	   #uwsgi临时目录
 --http-scgi-temp-path=/var/temp/nginx/scgi			   #scgi临时目录
---with-openssl=/usr/local/openssl-1.0.1j \ #指定openssl路径
+--with-openssl=/usr/local/openssl-1.1.1   \ #指定openssl路径
 --with-http_ssl_module  	#开启ssl模块
 
-./configure --prefix=/usr/local/nginx --pid-path=/var/run/nginx/nginx.pid --lock-path=/var/lock/nginx.lock --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-http_gzip_static_module --http-client-body-temp-path=/var/temp/nginx/client --http-proxy-temp-path=/var/temp/nginx/proxy --http-fastcgi-temp-path=/var/temp/nginx/fastcgi --http-uwsgi-temp-path=/var/temp/nginx/uwsgi --http-scgi-temp-path=/var/temp/nginx/scgi --with-openssl=/usr/local/openssl1.1.1 --with-http_ssl_module
+./configure --prefix=/usr/local/nginx --pid-path=/var/run/nginx/nginx.pid --lock-path=/var/lock/nginx.lock --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-http_gzip_static_module --http-client-body-temp-path=/var/temp/nginx/client --http-proxy-temp-path=/var/temp/nginx/proxy --http-fastcgi-temp-path=/var/temp/nginx/fastcgi --http-uwsgi-temp-path=/var/temp/nginx/uwsgi --http-scgi-temp-path=/var/temp/nginx/scgi --with-openssl=/usr/local/openssl-1.1.1 --with-http_ssl_module
+
+
+
+
+Configuration summary
+  + using system PCRE library
+  + using OpenSSL library: /usr/local/openssl-1.1.1
+  + using system zlib library
+
+  nginx path prefix: "/usr/local/nginx"
+  nginx binary file: "/usr/local/nginx/sbin/nginx"
+  nginx modules path: "/usr/local/nginx/modules"
+  nginx configuration prefix: "/usr/local/nginx/conf"
+  nginx configuration file: "/usr/local/nginx/conf/nginx.conf"
+  nginx pid file: "/var/run/nginx/nginx.pid"
+  nginx error log file: "/var/log/nginx/error.log"
+  nginx http access log file: "/var/log/nginx/access.log"
+  nginx http client request body temporary files: "/var/temp/nginx/client"
+  nginx http proxy temporary files: "/var/temp/nginx/proxy"
+  nginx http fastcgi temporary files: "/var/temp/nginx/fastcgi"
+  nginx http uwsgi temporary files: "/var/temp/nginx/uwsgi"
+  nginx http scgi temporary files: "/var/temp/nginx/scgi"
 ```
 
 5. 编译 & 安装
@@ -279,12 +303,11 @@ $ make install
 
 ```
 
-![1648611626899](E:\git\study-notes\linux\1648611626899.png)
-
 6. 启动`nginx`
 
 ```bash
 $ /usr/local/nginx/sbin/nginx  #启动
+# 可能会提示相关temp目录不存在，需手动创建
 $ /usr/local/nginx/sbin/nginx -s stop  #停止
 $ /usr/local/nginx/sbin/nginx -s reload #重启
 ```
@@ -296,8 +319,6 @@ $ curl http://127.0.0.1:80 -Iv
 $ curl -g http://[::1]:80 -Iv
 
 ```
-
-
 
 
 
@@ -360,52 +381,84 @@ server{
 
 # 4.	Python
 
-## 4.1	安装
+## 4.1	安装python3.9.12
 
 - 安装依赖
 
 ```bash
-$ yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel libffi-devel
+$ yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel libffi-devel xz-devel gdbm-devel
 
 ```
 
 - 下载，解压，
-- 处理openssl问题
-
-```bash
-#修改./Modules/Setup文件
-
-```
-
-
 
 - 进入解压目录
 
 ```bash
 $ ./configure --prefix=/usr/local/python3.10
 #configure 完成后往前翻看是否有modules缺失的信息，若有需安装相应文件，重新configure
+$ make && make install
+#安装完成后修改环境变量
+$ vi /etc/profile
+PATH=$PATH:/usr/local/python39:/usr/local/python39/bin
+export PATH
+$ source /etc/profile
 ```
 
 可能存在的问题：
 
-openssl  版本不对
+CentOS默认安装的`openssl`版本为1.0.2，python3.   要求openssl1.1.1以上
 
-![image-20220330004510776](C:\Users\ThorGeng\AppData\Roaming\Typora\typora-user-images\image-20220330004510776.png)
 
-安装openssl 后运行失败 需要安装zlib  
 
-![image-20220330004532063](C:\Users\ThorGeng\AppData\Roaming\Typora\typora-user-images\image-20220330004532063.png)
+### 4.1.1	安装`zlib `
 
-### 4.1.1	安装zlib 
+安装`openssl-1.1.1`后会运行失败 需要提前安装`zlib`
 
-安装`openssl `后运行失败 需要提前安装`zlib`
+http://www.zlib.net/zlib-1.2.12.tar.gz
 
-下载源码
+```bash
+$ tar zxf zlib-1.2.11.tgz -C /tmp/
+$ cd /tmp/zlib-1.2.11/
+# 安装静态库
+$ ./configure  
+$ make test
+$ make install
+# 安装共享库
+$ make clean
+$ ./configure --shared
+$ make test
+$ make install
+$ cp zutil.h /usr/loacl/include
+$ cp zutil.c /usr/loacl/include
+```
 
-安装静态库
 
-安装共享库
 
-### 4.1.2	安装openssl
+### 4.1.2	安装`openssl`
 
-下载源码，安装，
+下载源码https://www.openssl.org/source/openssl-1.1.1n.tar.gz，安装至`/usr/local/openssl-1.1.1`
+
+```bash
+$ tar zxf openssl-1.1.1n.tar.gz -C /tmp/
+$ cd /tmp/openssl-1.1.1n/
+$ ./config --prefix=/usr/local/openssl-1.1.1
+$ make && make install 
+$ openssl version 
+OpenSSL 1.0.2k-fips  26 Jan 2017   #安装未完成，还是老版本
+$ /usr/local/openssl-1.1.1/bin/openssl version  #运行新版本报错
+error while loading shared libraries: libssl.so.1.1: cannot open shared object file: No such file or directory
+# 备份老版本
+$ mv /usr/bin/openssl /usr/bin/openssl.bak1.0.2
+# /usr/include/下不存在openssl  不用管
+$ ln -s /usr/local/openssl-1.1.1/bin/openssl /usr/bin/openssl
+# 添加新版的函数库
+$ echo "/usr/local/openssl-1.1.1/lib/" >> /etc/ld.so.conf
+# 更新函数库
+$ ldconfig
+$ openssl version
+OpenSSL 1.1.1n  15 Mar 2022	# 安装成功
+```
+
+
+
