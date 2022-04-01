@@ -310,6 +310,23 @@ $ /usr/local/nginx/sbin/nginx  #启动
 # 可能会提示相关temp目录不存在，需手动创建
 $ /usr/local/nginx/sbin/nginx -s stop  #停止
 $ /usr/local/nginx/sbin/nginx -s reload #重启
+
+# 设置systemctl控制
+$ vi /lib/systemd/system/nginx.service
+
+[Unit]
+Description=nginx service
+After=network.target 
+   
+[Service] 
+Type=forking 
+ExecStart=/usr/local/nginx/sbin/nginx
+ExecReload=/usr/local/nginx/sbin/nginx -s reload
+ExecStop=/usr/local/nginx/sbin/nginx -s quit
+PrivateTmp=true 
+   
+[Install] 
+WantedBy=multi-user.target
 ```
 
 7. 测试
@@ -362,20 +379,137 @@ $ vim /usr/local/nginx/conf/nginx.conf
 ...
 server{
 	listen 80;
-	listen [::1]:80 ipv6only=on;
+	listen [::]:80 ipv6only=on;
 	...
 }
 ...
 #设置完后重启
 ```
 
+- `nginx`重启时提示`nginx.pid`丢失
 
+  在`./conf/nginx.conf`文件中设置
+
+  ```bash
+  pid        logs/nginx.pid;
+  ```
+
+  
 
 ## 2.2	配置
 
 # 3.	MySQL
 
 ## 3.1	安装
+
+- 删除`mariadb`
+
+```bash
+$ rpm -qa | grep maria*
+mariadb-libs-5.5.68-1.el7.x86_64
+$ yum erase -y mariadb-libs-5.5.68-1.el7.x86_64
+```
+
+- 解压并重命名
+
+```bash
+$ tar zxf mysql-8.0.28-el7-x86_64.tar.gz -C /usr/local/
+$ cd /usr/local/
+$ mv mysql-8.0.28-el7-x86_64/ ./mysql
+```
+
+- 创建mysql用户和组
+
+```bash
+$ groupadd mysql
+$ useradd -r -g mysql -s /sbin/nologin mysql
+```
+
+- 创建相关目录，变更权限
+
+```bash
+$ mkdir /usr/local/mysql/data
+$ mkdir /usr/local/mysql/etc
+$ mkdir /usr/local/mysql/log
+$ chown -R mysql:mysql /usr/local/mysql/
+```
+
+- 编辑mysql配置文件
+
+```bash
+$ vim /usr/local/mysql/etc/my.cnf
+[mysql]
+port = 3306
+socket = /usr/local/mysql/data/mysql.sock
+[mysqld]
+user = mysql
+port = 3306
+mysqlx_port = 33060
+mysqlx_socket = /usr/local/mysql/data/mysqlx.sock
+basedir = /usr/local/mysql
+datadir = /usr/local/mysql/data
+socket = /usr/local/mysql/data/mysql.sock
+pid-file = /usr/local/mysql/data/mysqld.pid
+log-error = /usr/local/mysql/log/error.log
+# 这个就是用之前的身份认证插件
+default-authentication-plugin = mysql_native_password
+# 保证日志的时间正确
+log_timestamps = SYSTEM
+```
+
+- 初始化数据库
+
+```bash
+$ ./bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+# 若提示缺少libaio.so.1  yum -y install libaio
+2022-04-01T14:01:32.086926Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: So(_W!2f,rWq	#这个密码要记住
+```
+
+- 启动`mysql`
+
+```bash
+$ ./support-files/mysql.server  start
+$ ./support-files/mysql.server  restart
+$ ./support-files/mysql.server  stop
+
+# 设置systemd控制
+$ vi /lib/systemd/system/mysql.service
+[Unit]
+Description=mysql service
+After=network.target 
+   
+[Service] 
+Type=forking 
+ExecStart=/usr/local/mysql/support-files/mysql.server start
+ExecReload=/usr/local/mysql/support-files/mysql.server  restart
+ExecStop=/usr/local/mysql/support-files/mysql.server  stop
+PrivateTmp=true 
+   
+[Install] 
+WantedBy=multi-user.target
+
+
+```
+
+- 登录`mysql`并配置
+
+```sql
+$ ./bin/mysql -u root -p
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '*****'; # 重置密码
+# 创建远程用户登录
+mysql> use mysql
+
+mysql> create user 'root'@'%' identified by 'password';
+mysql> grant all privileges on *.* to 'root'@'%' with grant option;
+mysql> flush privileges;
+
+# 重启，用Navicat尝试远程连接
+
+```
+
+
+
+
 
 ## 3.2	配置
 
@@ -395,11 +529,11 @@ $ yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel
 - 进入解压目录
 
 ```bash
-$ ./configure --prefix=/usr/local/python3.10
-#configure 完成后往前翻看是否有modules缺失的信息，若有需安装相应文件，重新configure
+$ ./configure --prefix=/usr/local/python39
+#configure 完成后往前翻看是否有modules缺失的信息，若有需安装相应依赖，重新configure
 $ make && make install
 #安装完成后修改环境变量
-$ vi /etc/profile
+$ vi /etc/profile  #添加以下代码
 PATH=$PATH:/usr/local/python39:/usr/local/python39/bin
 export PATH
 $ source /etc/profile
@@ -429,8 +563,8 @@ $ make clean
 $ ./configure --shared
 $ make test
 $ make install
-$ cp zutil.h /usr/loacl/include
-$ cp zutil.c /usr/loacl/include
+$ cp zutil.h /usr/local/include
+$ cp zutil.c /usr/local/include
 ```
 
 
@@ -462,3 +596,4 @@ OpenSSL 1.1.1n  15 Mar 2022	# 安装成功
 
 
 
+## 4.2	配置`django`
