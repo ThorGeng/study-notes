@@ -474,6 +474,7 @@ $ ./support-files/mysql.server  stop
 
 # 设置systemd控制
 $ vi /lib/systemd/system/mysql.service
+
 [Unit]
 Description=mysql service
 After=network.target 

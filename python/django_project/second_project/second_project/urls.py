@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from user_manage import views
 urlpatterns = [
+    path('',views.depart_list),
     #部门管理
     path('depart/list/', views.depart_list),
     path('depart/add/', views.depart_add),

@@ -1,7 +1,6 @@
-from pyexpat import model
+
 from django.shortcuts import render,redirect
-from matplotlib import widgets
-from matplotlib.pyplot import title
+
 from user_manage import models
 from django import forms
 # Create your views here.

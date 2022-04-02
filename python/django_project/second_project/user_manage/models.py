@@ -1,10 +1,6 @@
-from pyexpat import model
-from tabnanny import verbose
+
 from django.db import models
-from django.forms import CharField
-from matplotlib.pyplot import cla, title
-from sklearn import model_selection
-from sklearn.metrics import max_error
+
 
 # Create your models here.
 class Department(models.Model):
