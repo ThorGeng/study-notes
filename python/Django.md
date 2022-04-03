@@ -32,6 +32,16 @@ wsgi.py---接受网络请求
 asgi.py---接受网络请求
 ```
 
+## 1.3 `local_settings.py`
+
+```python
+# settings.py
+try:
+    from .local_settings.py import *
+except ImportError:
+    pass
+```
+
 
 
 

@@ -9,6 +9,7 @@
    ```shell
    $ cd venv_dir/
    $ ./Scripts/activate
+   $ soucre ./bin/activate  # linux系统
    $ pip install package
    ```
 
