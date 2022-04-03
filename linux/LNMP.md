@@ -398,6 +398,20 @@ server{
 
 ## 2.2	配置
 
+### 2.2.1	反向代理
+
+
+
+
+
+### 2.2.2	负载均衡
+
+
+
+
+
+
+
 # 3.	MySQL
 
 ## 3.1	安装
@@ -598,3 +612,97 @@ OpenSSL 1.1.1n  15 Mar 2022	# 安装成功
 
 
 ## 4.2	配置`django`
+
+
+
+
+
+# 5.部署`django`
+
+## 5.1 将`django`项目放到`linux`系统中
+
+用ftp将开发环境的`django`代码推送至`linux`服务器(需要开放21端口，且服务器需开启`vsftpd`服务)
+
+```bash
+$ yum install vsftpd
+$ systemctl start vsftpd
+```
+
+
+
+## 5.2 创建虚拟环境，在虚拟环境中安装所要的`python`第三方库及`uWSGI`
+
+```bash
+$ python3 -m venv .venv #创建虚拟环境
+(.venv)$ pip3 install uwsgi
+(.venv)$ pip3 install -r requirement.txt
+(.venv)$ python3 manage.py runserver # 试运行Django项目
+```
+
+## 5.3 关联`uWSGI`与`django`
+
+在与`manage.py`同级的目录创建`uWSGI`的配置文件`uwsgi.ini`
+
+```bash
+#添加配置选择
+[uwsgi]
+#配置和nginx连接的socket连接
+module=second_project.wsgi:application
+socket=127.0.0.1:8000
+#配置项目路径，项目的所在目录
+chdir=/home/thorgeng/django/second_project
+#配置wsgi接口模块文件路径,也就是wsgi.py这个文件所在的目录名
+wsgi-file=second_project/wsgi.py
+#配置启动的进程数
+processes=4
+#配置每个进程的线程数
+threads=2
+#配置启动管理主进程
+master=True
+#配置存放主进程的进程号文件,视情况设置，不固定
+pidfile=/home/thorgeng/django/second_project/uwsgi.pid
+#配置dump日志记录,视情况设置，不固定
+daemonize=/home/thorgeng/django/second_project/uwsgi.log
+```
+
+
+
+## 5.4 关联`Nginx`与`uWSGI`
+
+修改`/usr/local/nginx/conf/nignx.conf`文件
+
+```bash
+user thorgeng
+server {
+        listen       8080;
+	    listen 	     [::]:8080 ipv6only=on;
+        server_name  localhost;
+        charset utf-8;
+		
+        location / {
+	    include uwsgi_params;
+		    uwsgi_pass 127.0.0.1:8000;
+        }
+        # 静态文件设置
+        # url后时/static/会读取/home/thorgeng/django/second_project/user_manage/static/文件夹内的内容，如果css样式缺失，可能的原因是权限问题，在nginx.conf文件前加`user name`,name为指向的路径/home/.../static/的所有者,
+	    location /static/ {
+		    alias /home/thorgeng/django/second_project/user_manage/static/;
+		    index index.html;
+	}
+}
+
+```
+
+## 
+
+## 5.5 可能出现的问题
+
+- 网页无`css`样式
+
+查看`nginx`的`error.log`文件`/var/log/nginx/error.log`
+
+```
+2022/04/03 12:24:08 [error] 1978#0: *1 open() "/home/thorgeng/django/second_project/user_manage/static/js/bootstrap.min.js" failed (13: Permission denied), client: 192.168.0.104, server: localhost, request: "GET /static/js/bootstrap.min.js HTTP/1.1", host: "192.168.0.106:8080", referrer: "http://192.168.0.106:8080/"
+```
+
+以上提示`Permission denied`没有权限，需更改`nginx.conf`中的`user`设置
