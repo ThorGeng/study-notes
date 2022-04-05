@@ -706,3 +706,31 @@ server {
 ```
 
 以上提示`Permission denied`没有权限，需更改`nginx.conf`中的`user`设置
+
+# 6 Redis
+
+```bash
+# /etc/systemd/system/redis.service
+[unit]
+Description=redis-server
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/redis6/bin/redis-server /usr/local/redis/redis.conf
+ExecStop=/usr/local/redis6/bin/redis-cli  shutdown
+PrivateTmp=true
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+# /usr/local/redis/redis.conf
+port 6379
+daemonize yes   # 后台运行
+bind 0.0.0.0
+```
+
