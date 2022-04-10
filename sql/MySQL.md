@@ -24,7 +24,8 @@ mysql> show databases;
 ## 2.新建数据库
 
 ```mysql
-mysql> create database mydata_one charset utf8;
+mysql> create database mydata_one charset utf8mb4;
+# mysql8.0 默认使用utf8mb4的字符编码
 ```
 
 ## 3.进入或切换数据库
@@ -154,11 +155,42 @@ mysql> desc first_table;
 
 ```
 
+# 5 SQL语言的分类
 
+## 5.1 DDL数据定义语言
 
+- create
+- alter
+- drop
+- rename
+- truncate
 
+## 5.2 DML数据操作语言
 
+- insert 
 
+- delete
+
+- update
+
+- **select**
+
+  1. 去除重复行
+
+  ```sql
+  select distinct 字段名 from 表名
+  ```
+
+  
+
+## 5.3 DCL数据控制语言
+
+- commit
+
+- rollback
+- savepoint
+- grant
+- revoke
 
 
 
